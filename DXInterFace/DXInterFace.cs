@@ -25,6 +25,9 @@ namespace TakamineProduction
 		/// <summary>入力の押下フレーム数が1以上から0に戻った最初のフレームであることを表す。</summary>
 		public bool WasPressed { get; private set; }
 
+		static private int MouseIn { get; set; }
+		static private byte[] KeyIn { get; set; } = new byte[256];
+
 
 		/// <summary>コンストラクタ</summary>
 		/// <param name="inputType">インターフェースの種類</param>
@@ -47,6 +50,42 @@ namespace TakamineProduction
 
 
 
+		static private void InputUpdate()
+		{
+			MouseIn = DX.GetMouseInput();
+			DX.GetHitKeyStateAll(KeyIn);
+		}
+
+		private void Update()
+		{
+			switch (IFType)
+			{
+				case DXIFType.KeyBoard:
+					IFUpdate(KeyIn[IFID] == 1);
+					break;
+				case DXIFType.Mouse:
+					IFUpdate((MouseIn & IFID) != 0);
+					break;
+			}
+
+			void IFUpdate(bool pressed)
+			{
+				if (pressed)
+				{
+					if (Frame < int.MaxValue)
+						Frame++;
+				}
+				else
+				{
+					WasPressed = (Frame > 0);
+					Frame = 0;
+				}
+
+				IsPressed = (Frame == 1);
+				IsPressing = (Frame >= 1);
+			}
+		}
+
 		/// <summary>DXInterFaceをまとめて管理するDictionaryクラス</summary>
 		public class DXController : Dictionary<string, DXInterFace>
 		{
@@ -56,6 +95,9 @@ namespace TakamineProduction
 			public int MX { get; private set; }
 			/// <summary>Update時点でのマウスのY座標</summary>
 			public int MY { get; private set; }
+
+			public byte[] RawKeyData { get; private set; }
+
 
 			/// <summary>インターフェースを追加する</summary>
 			/// <param name="key">追加する要素のキー</param>
@@ -75,41 +117,10 @@ namespace TakamineProduction
 				MX = x;
 				MY = y;
 
-				int mouseIn = DX.GetMouseInput();
-				byte[] keyIn = new byte[256];
-				DX.GetHitKeyStateAll(keyIn);
+				InputUpdate();
 
 				foreach (var i in Values)
-				{
-					switch (i.IFType)
-					{
-						case DXIFType.KeyBoard:
-							IFUpdate(i, keyIn[i.IFID] == 1);
-							break;
-						case DXIFType.Mouse:
-							IFUpdate(i, (mouseIn & i.IFID) != 0);
-							break;
-					}
-				}
-
-				//**********************************************************************************
-
-				void IFUpdate(DXInterFace i,bool pressed)
-				{
-					if (pressed)
-					{
-						if (i.Frame < int.MaxValue)
-							i.Frame++;
-					}
-					else
-					{
-						i.WasPressed = (i.Frame > 0);
-						i.Frame = 0;
-					}
-
-					i.IsPressed = (i.Frame == 1);
-					i.IsPressing = (i.Frame >= 1);
-				}
+					i.Update();
 			}
 		}
 
