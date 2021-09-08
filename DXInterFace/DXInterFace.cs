@@ -46,21 +46,30 @@ namespace TakamineProduction
 		}
 
 
+
 		/// <summary>DXInterFaceをまとめて管理するDictionaryクラス</summary>
-		public class IFs : Dictionary<string, DXInterFace>
+		public class DXController : Dictionary<string, DXInterFace>
 		{
 			/// <summary>前回のUpdateから比較したホイールの回転量を表す（奥：正数　手前：負数）</summary>
-			public int WheelVol { get; private set; }
+			public int Wheel { get; private set; }
 			/// <summary>Update時点でのマウスのX座標</summary>
 			public int MX { get; private set; }
 			/// <summary>Update時点でのマウスのY座標</summary>
 			public int MY { get; private set; }
 
+			/// <summary>インターフェースを追加する</summary>
+			/// <param name="key">追加する要素のキー</param>
+			/// <param name="inputType">インターフェースの種類</param>
+			/// <param name="inputID">インターフェースの入力のID</param>
+			public void Add(string key, DXIFType inputType, int inputID)
+			{
+				Add(key, new DXInterFace(inputType, inputID));
+			}
 
 			/// <summary>全ての入力を更新する。毎フレーム実行してください</summary>
 			public void Update()
 			{
-				WheelVol = DX.GetMouseWheelRotVol();
+				Wheel = DX.GetMouseWheelRotVol();
 
 				DX.GetMousePoint(out int x, out int y);
 				MX = x;
@@ -75,17 +84,17 @@ namespace TakamineProduction
 					switch (i.IFType)
 					{
 						case DXIFType.KeyBoard:
-							InputUpdate(i, keyIn[i.IFID] == 1);
+							IFUpdate(i, keyIn[i.IFID] == 1);
 							break;
 						case DXIFType.Mouse:
-							InputUpdate(i, (mouseIn & i.IFID) != 0);
+							IFUpdate(i, (mouseIn & i.IFID) != 0);
 							break;
 					}
 				}
 
 				//**********************************************************************************
 
-				void InputUpdate(DXInterFace i,bool pressed)
+				void IFUpdate(DXInterFace i,bool pressed)
 				{
 					if (pressed)
 					{
