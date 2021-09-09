@@ -96,8 +96,6 @@ namespace TakamineProduction
 			/// <summary>Update時点でのマウスのY座標</summary>
 			public int MY { get; private set; }
 
-			public byte[] RawKeyData { get; private set; }
-
 
 			/// <summary>インターフェースを追加する</summary>
 			/// <param name="key">追加する要素のキー</param>
@@ -124,9 +122,12 @@ namespace TakamineProduction
 			}
 		}
 
+		/// <summary>インターフェースの種類</summary>
 		public enum DXIFType
 		{
+			/// <summary>マウス</summary>
 			Mouse,
+			/// <summary>キーボード</summary>
 			KeyBoard
 		}
 	}
