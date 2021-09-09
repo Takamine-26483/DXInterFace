@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // 制御されます。アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("DXInput")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("DXInterFace")]
+[assembly: AssemblyDescription("入力インターフェースを統合し、自由に切り替え可能な入力クラス。内部クラスのDXControllerからご利用ください")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DXInput")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyProduct("DXInterFace")]
+[assembly: AssemblyCopyright("© Takamine 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

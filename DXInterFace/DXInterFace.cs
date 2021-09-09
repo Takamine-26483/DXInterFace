@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TakamineProduction
 {
-	/// <summary>入力インターフェースを統合し、自由に切り替え可能な入力クラス。内部クラスのIFsからご利用ください</summary>
+	/// <summary>入力インターフェースを統合し、自由に切り替え可能な入力クラス。内部クラスのDXControllerからご利用ください</summary>
 	public class DXInterFace
 	{
 		/// <summary>インターフェースの種類</summary>
